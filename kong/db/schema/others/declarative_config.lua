@@ -193,8 +193,8 @@ end
 
 local function build_fields(entities, include_foreign)
   local fields = {
-    { _format_version = { type = "string", required = true, eq = "1.1" } },
-    { _transformations_enabled = { type = "boolean", default = true } },
+    { _format_version = { type = "string", required = true, one_of = {"1.1", "2.0"} } },
+    { _transform = { type = "boolean", default = true } },
   }
   add_extra_attributes(fields, {
     _comment = true,
@@ -556,12 +556,12 @@ end
 
 
 local function flatten(self, input)
-  -- manually set transformations_enabled here
+  -- manually set transform here
   -- we can't do this in the schema with a `default` because validate
   -- needs to happen before process_auto_fields, which
   -- is the one in charge of filling out default values
-  if input._transformations_enabled == nil then
-    input._transformations_enabled = true
+  if input._transform == nil then
+    input._transform = true
   end
 
   local ok, err = self:validate(input)

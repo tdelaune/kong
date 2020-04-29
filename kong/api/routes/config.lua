@@ -111,7 +111,7 @@ return {
       end
 
       _reports.decl_fmt_version = dc_table._format_version
-      _reports.decl_trans_en    = dc_table._transformations_enabled
+      _reports.decl_transform   = dc_table._transform
 
       ngx.timer.at(0, reports_timer)
 

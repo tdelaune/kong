@@ -105,7 +105,7 @@ for _, strategy in helpers.each_strategy() do
       }))
 
       assert(declarative.load_into_db({
-        _transformations_enabled = false,
+        _transform = false,
         basicauth_credentials = { [basicauth_hashed_credential_def.id] = basicauth_hashed_credential_def },
       }))
     end)

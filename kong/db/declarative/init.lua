@@ -78,7 +78,7 @@ end
 -- first return item: a table with the following format:
 --   {
 --     _format_version: 1.1,
---     _transformations_enabled: true,
+--     _transform: true,
 --     services: {
 --       ["<uuid>"] = { ... },
 --       ...
@@ -157,7 +157,7 @@ end
 -- first return item: a table with the following format:
 --   {
 --     _format_version: 1.1,
---     _transformations_enabled: true,
+--     _transform: true,
 --     services: {
 --       ["<uuid>"] = { ... },
 --       ...
@@ -239,7 +239,7 @@ function declarative.load_into_db(dc_table)
   end
 
   local options = {
-    transformations_enabled = dc_table._transformations_enabled,
+    transform = dc_table._transform,
   }
   local schema, primary_key, ok, err, err_t
   for i = 1, #sorted_schemas do
@@ -272,8 +272,8 @@ function declarative.export_from_db(fd)
   end
 
   fd:write(declarative.to_yaml_string({
-    _format_version = "1.1",
-    _transformations_enabled = false,
+    _format_version = "2.0",
+    _transform = false,
   }))
 
   for _, schema in ipairs(sorted_schemas) do
@@ -327,8 +327,8 @@ function declarative.export_config()
   end
 
   local out = {
-    _format_version = "1.1",
-    _transformations_enabled = false,
+    _format_version = "2.0",
+    _transform = false,
   }
 
   for _, schema in ipairs(sorted_schemas) do
@@ -389,7 +389,7 @@ end
 -- dc_table format:
 --   {
 --     _format_version: 1.1,
---     _transformations_enabled: true,
+--     _transform: true,
 --     services: {
 --       ["<uuid>"] = { ... },
 --       ...
@@ -445,14 +445,14 @@ function declarative.load_into_cache(dc_table, hash, shadow_page)
       end
     end
 
-    local transformations_enabled = dc_table._transformations_enabled
+    local transform = dc_table._transform == nil and true or dc_table._transform
     local ids = {}
     for id, item in pairs(items) do
       table.insert(ids, id)
 
       local cache_key = dao:cache_key(id)
       item = remove_nulls(item)
-      if transformations_enabled then
+      if transform then
         local err
         item, err = schema:transform(item)
         if not item then

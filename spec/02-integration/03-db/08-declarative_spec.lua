@@ -141,7 +141,7 @@ for _, strategy in helpers.each_strategy() do
 
       -- import without performing transformations
       assert(declarative.load_into_db({
-        _transformations_enabled = false,
+        _transform = false,
         basicauth_credentials = { [basicauth_hashed_credential_def.id] = basicauth_hashed_credential_def },
       }))
     end)
@@ -219,7 +219,7 @@ for _, strategy in helpers.each_strategy() do
         table.sort(toplevel_keys)
         assert.same({
           "_format_version",
-          "_transformations_enabled",
+          "_transform",
           "acls",
           "basicauth_credentials",
           "certificates",
@@ -230,8 +230,8 @@ for _, strategy in helpers.each_strategy() do
           "snis"
         }, toplevel_keys)
 
-        assert.equals("1.1", yaml._format_version)
-        assert.equals(false, yaml._transformations_enabled)
+        assert.equals("2.0", yaml._format_version)
+        assert.equals(false, yaml._transform)
 
         assert.equals(1, #yaml.snis)
         local sni = assert(yaml.snis[1])

@@ -252,9 +252,9 @@ local function validate_options_value(self, options)
     end
   end
 
-  if options.transformations_enabled ~= nil then
-    if type(options.transformations_enabled) ~= "boolean" then
-      errors.transformations_enabled = "must be a boolean"
+  if options.transform ~= nil then
+    if type(options.transform) ~= "boolean" then
+      errors.transform = "must be a boolean"
     end
   end
 
@@ -326,18 +326,18 @@ end
 
 
 local function check_insert(self, entity, options)
-  local transformations_enabled
+  local transform
   if options ~= nil then
     local ok, errors = validate_options_value(self, options)
     if not ok then
       local err_t = self.errors:invalid_options(errors)
       return nil, tostring(err_t), err_t
     end
-    transformations_enabled = options.transformations_enabled
+    transform = options.transform
   end
 
-  if transformations_enabled == nil then
-    transformations_enabled = true
+  if transform == nil then
+    transform = true
   end
 
   local entity_to_insert, err = self.schema:process_auto_fields(entity, "insert")
@@ -357,7 +357,7 @@ local function check_insert(self, entity, options)
     return nil, tostring(err_t), err_t
   end
 
-  if transformations_enabled then
+  if transform then
     entity_to_insert, err = self.schema:transform(entity_to_insert, entity, "insert")
     if not entity_to_insert then
       err_t = self.errors:transformation_error(err)
@@ -374,18 +374,18 @@ end
 
 
 local function check_update(self, key, entity, options, name)
-  local transformations_enabled
+  local transform
   if options ~= nil then
     local ok, errors = validate_options_value(self, options)
     if not ok then
       local err_t = self.errors:invalid_options(errors)
       return nil, nil, tostring(err_t), err_t
     end
-    transformations_enabled = options.transformations_enabled
+    transform = options.transform
   end
 
-  if transformations_enabled == nil then
-    transformations_enabled = true
+  if transform == nil then
+    transform = true
   end
 
   local entity_to_update, err, read_before_write, check_immutable_fields =
@@ -437,7 +437,7 @@ local function check_update(self, key, entity, options, name)
     return nil, nil, tostring(err_t), err_t
   end
 
-  if transformations_enabled then
+  if transform then
     entity_to_update, err = self.schema:transform(entity_to_update, entity, "update")
     if not entity_to_update then
       err_t = self.errors:transformation_error(err)
@@ -454,18 +454,18 @@ end
 
 
 local function check_upsert(self, entity, options, name, value)
-  local transformations_enabled
+  local transform
   if options ~= nil then
     local ok, errors = validate_options_value(self, options)
     if not ok then
       local err_t = self.errors:invalid_options(errors)
       return nil, tostring(err_t), err_t
     end
-    transformations_enabled = options.transformations_enabled
+    transform = options.transform
   end
 
-  if transformations_enabled == nil then
-    transformations_enabled = true
+  if transform == nil then
+    transform = true
   end
 
   local entity_to_upsert, err = self.schema:process_auto_fields(entity, "upsert")
@@ -493,7 +493,7 @@ local function check_upsert(self, entity, options, name, value)
     entity_to_upsert[name] = nil
   end
 
-  if transformations_enabled then
+  if transform then
     entity_to_upsert, err = self.schema:transform(entity_to_upsert, entity, "upsert")
     if not entity_to_upsert then
       err_t = self.errors:transformation_error(err)
@@ -1161,7 +1161,7 @@ end
 
 
 function DAO:row_to_entity(row, options)
-  local transformations_enabled, nulls
+  local transform, nulls
   if options ~= nil then
     validate_options_type(options)
     local ok, errors = validate_options_value(self, options)
@@ -1169,12 +1169,12 @@ function DAO:row_to_entity(row, options)
       local err_t = self.errors:invalid_options(errors)
       return nil, tostring(err_t), err_t
     end
-    transformations_enabled = options.transformations_enabled
+    transform = options.transform
     nulls = options.nulls
   end
 
-  if transformations_enabled == nil then
-    transformations_enabled = true
+  if transform == nil then
+    transform = true
   end
 
   local entity, errors = self.schema:process_auto_fields(row, "select", nulls)
@@ -1183,7 +1183,7 @@ function DAO:row_to_entity(row, options)
     return nil, tostring(err_t), err_t
   end
 
-  if transformations_enabled then
+  if transform then
     local err
     entity, err = self.schema:transform(entity, row, "select")
     if not entity then

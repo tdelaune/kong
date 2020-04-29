@@ -23,7 +23,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           services = {}
         }, config)
       end)
@@ -48,7 +48,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           services = {
             {
               name = "foo",
@@ -89,7 +89,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           services = {
             {
               name = "foo",
@@ -116,7 +116,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           plugins = {}
         }, config)
       end)
@@ -139,7 +139,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           plugins = {
             {
               _comment = "my comment",
@@ -190,7 +190,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           plugins = {
             {
               route = "foo",
@@ -239,7 +239,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -287,7 +287,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -380,7 +380,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -427,7 +427,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -513,7 +513,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -576,7 +576,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             services = {
               {
                 name = "foo",
@@ -689,7 +689,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           oauth2_credentials = {}
         }, config)
       end)
@@ -709,7 +709,7 @@ describe("declarative config: process_auto_fields", function()
         config = DeclarativeConfig:process_auto_fields(config, "select", false)
         assert.same({
           _format_version = "1.1",
-          _transformations_enabled = true,
+          _transform = true,
           oauth2_credentials = {
             {
               client_type = "confidential",
@@ -741,7 +741,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             consumers = {
               {
                 username = "bob",
@@ -767,7 +767,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             consumers = {
               {
                 username = "bob",
@@ -804,7 +804,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             oauth2_credentials = {
               {
                 client_type = "confidential",
@@ -832,7 +832,7 @@ describe("declarative config: process_auto_fields", function()
           config = DeclarativeConfig:process_auto_fields(config, "select", false)
           assert.same({
             _format_version = "1.1",
-            _transformations_enabled = true,
+            _transform = true,
             oauth2_credentials = {
               {
                 client_type = "confidential",
