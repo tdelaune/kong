@@ -330,6 +330,70 @@ for _, strategy in helpers.each_strategy() do
 
   end)
 
+  describe("mTLS #" .. strategy, function()
+
+    lazy_setup(function()
+      bp = bu.get_db_utils_for_dc_and_admin_api(strategy, {
+        "services",
+        "routes",
+        "upstreams",
+        "targets",
+      })
+
+      local fixtures = {
+        dns_mock = helpers.dns_mock.new()
+      }
+
+      fixtures.dns_mock:A {
+        name = "notlocalhost.test",
+        address = "127.0.0.1",
+      }
+
+      assert(helpers.start_kong({
+        database   = strategy,
+        nginx_conf = "spec/fixtures/custom_nginx.template",
+        client_ssl = true,
+        client_ssl_cert = "spec/fixtures/kong_spec.crt",
+        client_ssl_cert_key = "spec/fixtures/kong_spec.key",
+        db_update_frequency = 0.1,
+        stream_listen = "off",
+        plugins = "bundled,fail-once-auth",
+      }, nil, nil, fixtures))
+    end)
+
+    lazy_teardown(function()
+      helpers.stop_kong()
+    end)
+
+    it("create active health checks", function()
+      -- configure healthchecks
+      bu.begin_testcase_setup(strategy, bp)
+      local upstream_name, upstream_id = bu.add_upstream(bp, {
+        healthchecks = bu.healthchecks_config {
+          active = {
+            type = "https",
+            http_path = "/status",
+            healthy = {
+              interval = bu.HEALTHCHECK_INTERVAL,
+              successes = 1,
+            },
+            unhealthy = {
+              interval = bu.HEALTHCHECK_INTERVAL,
+              http_failures = 1,
+            },
+          }
+        }
+      })
+      bu.add_target(bp, upstream_id, "notlocalhost.test", 15555)
+      bu.end_testcase_setup(strategy, bp)
+
+      local health = bu.get_balancer_health(upstream_name)
+      assert.is.table(health)
+      assert.is.table(health.data)
+      bu.poll_wait_health(upstream_id, "notlocalhost.test", "15555", "UNHEALTHY")
+    end)
+  end)
+
   describe("Ring-balancer #" .. strategy, function()
 
     lazy_setup(function()

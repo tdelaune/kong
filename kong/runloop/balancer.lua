@@ -367,10 +367,18 @@ do
         checks.active.unhealthy.interval = 0
       end
 
+      local ssl_cert, ssl_key
+      if kong.configuration.client_ssl then
+        ssl_cert = kong.configuration.client_ssl_cert
+        ssl_key = kong.configuration.client_ssl_cert_key
+      end
+
       local healthchecker, err = healthcheck.new({
         name = upstream.name,
         shm_name = "kong_healthchecks",
         checks = checks,
+        ssl_cert = ssl_cert,
+        ssl_key = ssl_key,
       })
 
       if not healthchecker then
